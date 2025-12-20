@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block navbar %}
+<nav class="navbar">
+    <div class="container" style="justify-content: center;">
+        <span class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="{% static 'kucet_logo.png' %}" alt="Logo" style="height: 40px; width: auto;">
+            KUCET Payment Portal
+        </span>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Static Background -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'home_bg.jpg' %}');">
+        </div>
+        <!-- Dark Overlay for Readability -->
+        <div class="absolute inset-0 bg-gray-900/80"></div>
+    </div>
+
+    <!-- Main Content (z-10 to stay on top) -->
+    <div
+        class="max-w-4xl w-full space-y-8 relative z-10 glass-card p-8 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-sm">
+        <div class="text-center">
+            <h2 id="greeting-text"
+                class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-indigo-500 mb-2 animate-pulse">
+                Welcome!
+            </h2>
+            <h1 class="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mb-4">
+                Select User Role
+            </h1>
+            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-400 sm:mt-4">
+                Please choose your role to proceed to the portal.
+            </p>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const hour = new Date().getHours();
+                let greeting = "Welcome";
+                if (hour >= 5 && hour < 12) greeting = "Good Morning";
+                else if (hour >= 12 && hour < 17) greeting = "Good Afternoon";
+                else if (hour >= 17 && hour < 22) greeting = "Good Evening";
+
+                const greetingElement = document.getElementById('greeting-text');
+                if (greetingElement) {
+                    greetingElement.textContent = greeting + ", User!";
+                }
+            });
+        </script>
+
+        <div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            <!-- Student Card -->
+            <a href="{% url 'login' %}"
+                class="relative group bg-gray-800 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out transform hover:-translate-y-1">
+                <div>
+                    <span class="rounded-lg inline-flex p-3 bg-indigo-500 text-white ring-4 ring-white">
+                        <!-- Heroicon name: outline/academic-cap -->
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 14l9-5-9-5-9 5 9 5z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-lg font-medium">
+                        <span class="absolute inset-0" aria-hidden="true"></span>
+                        Student
+                    </h3>
+                    <p class="mt-2 text-sm text-gray-400">
+                        Login with email OTP to view results, transactions and details.
+                    </p>
+                </div>
+                <span class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400"
+                    aria-hidden="true">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM4 4a1 1 0 011-1v2H4V4zm10 0v2a1 1 0 01-1-1h1zm0 0h6v-2h-6v2zM5 4h3V2H5v2zm-1 1h16v-2H4v2zm1 11v6h2v-6H5zm10-10h4v-2h-4v2zM4 15V4h-2v11h2zm1 4.414l-1.707 1.707 1.414 1.414 1.707-1.707-1.414-1.414z" />
+                    </svg>
+                </span>
+            </a>
+
+            <!-- Admin Card -->
+            <a href="{% url 'internal_login' %}?role=admin"
+                class="relative group bg-gray-800 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out transform hover:-translate-y-1">
+                <div>
+                    <span class="rounded-lg inline-flex p-3 bg-purple-500 text-white ring-4 ring-white">
+                        <!-- Heroicon name: outline/user-group -->
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-lg font-medium">
+                        <span class="absolute inset-0" aria-hidden="true"></span>
+                        Admin
+                    </h3>
+                    <p class="mt-2 text-sm text-gray-400">
+                        Login with credentials to manage students and view reports.
+                    </p>
+                </div>
+            </a>
+
+            <!-- Exam Branch Card -->
+            <a href="{% url 'internal_login' %}?role=exam_branch"
+                class="relative group bg-gray-800 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out transform hover:-translate-y-1">
+                <div>
+                    <span class="rounded-lg inline-flex p-3 bg-green-500 text-white ring-4 ring-white">
+                        <!-- Heroicon name: outline/document-text -->
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-lg font-medium">
+                        <span class="absolute inset-0" aria-hidden="true"></span>
+                        Exam Branch
+                    </h3>
+                    <p class="mt-2 text-sm text-gray-400">
+                        Manage exam fees and view enrolled students.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

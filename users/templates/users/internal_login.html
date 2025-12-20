@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% if role == 'admin' %}Admin Login{% elif role == 'exam_branch' %}Exam Branch Login{% else %}Staff Login{% endif %} -
+EduPay{% endblock %}
+
+{% block navbar %}
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">KUCET Payment Portal</a>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <!-- Login button hidden on this page -->
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div
+    class="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Background Animation (Reused from login) -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black opacity-90"></div>
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+            <div
+                class="absolute animate-blob mix-blend-multiply filter blur-xl opacity-20 top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full">
+            </div>
+            <div
+                class="absolute animate-blob animation-delay-2000 mix-blend-multiply filter blur-xl opacity-20 top-0 -right-4 w-72 h-72 bg-yellow-500 rounded-full">
+            </div>
+            <div
+                class="absolute animate-blob animation-delay-4000 mix-blend-multiply filter blur-xl opacity-20 -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full">
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-md w-full space-y-8 relative z-10 glass-card p-8 rounded-2xl border border-white/10 shadow-2xl">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-white tracking-tight">
+                {% if role == 'admin' %}
+                Admin Login
+                {% elif role == 'exam_branch' %}
+                Exam Branch Login
+                {% else %}
+                Staff Login
+                {% endif %}
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-400">
+                Please login with your credentials
+            </p>
+        </div>
+
+        <form class="mt-8 space-y-6" method="POST" action="{% url 'internal_login' %}">
+            {% csrf_token %}
+            <input type="hidden" name="role" value="{{ role }}">
+            {% if form.errors %}
+            <div class="rounded-md bg-red-500/20 p-4 border border-red-500/50">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <!-- Heroicon name: solid/x-circle -->
+                        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-300">
+                            Login failed
+                        </h3>
+                        <div class="mt-2 text-sm text-red-200">
+                            {{ form.non_field_errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div class="mb-6">
+                    <label for="username" class="sr-only">Email Address</label>
+                    <input id="username" name="username" type="email" required
+                        class="appearance-none rounded-lg relative block w-full px-4 py-4 border border-gray-600 placeholder-gray-400 text-white bg-gray-700/50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-lg backdrop-blur-sm transition-all duration-300"
+                        placeholder="Email Address">
+                    {% if form.username.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.username.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="sr-only">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                        class="appearance-none rounded-lg relative block w-full px-4 py-4 border border-gray-600 placeholder-gray-400 text-white bg-gray-700/50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-lg backdrop-blur-sm transition-all duration-300"
+                        placeholder="Password">
+                    {% if form.password.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.password.errors }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div>
+                <button type="submit"
+                    class="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-indigo-500/50">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <!-- Heroicon name: solid/lock-closed -->
+                        <svg class="h-6 w-6 text-indigo-500 group-hover:text-indigo-400"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    Sign in
+                </button>
+            </div>
+
+            <div class="text-center mt-6">
+                <a href="{% url 'home' %}"
+                    class="font-medium text-lg text-indigo-400 hover:text-indigo-300 transition-colors">
+                    &larr; Back to Home
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

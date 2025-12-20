@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - EduPay{% endblock %}
+
+{% block content %}
+<div class="card wide">
+
+    <div class="student-info card">
+        <h3>My Profile</h3>
+        <p><strong>Name:</strong> {{ student_profile.full_name }}</p>
+        <p><strong>Roll Number:</strong> {{ student_profile.roll_number }}</p>
+        <p><strong>Branch:</strong> {{ student_profile.branch }}</p>
+        <p><strong>Year:</strong> {{ student_profile.year }}</p>
+    </div>
+
+    <h3 style="margin-top: 2rem;">Available Exams</h3>
+    {% if exams %}
+    <div class="exam-list">
+        {% for exam in exams %}
+        <div class="exam-item"
+            style="background: #fdfdfd; padding: 1rem; border: 1px solid #eee; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; color: #333;">
+            <div>
+                <strong>{{ exam.name }}</strong>
+                <span style="display: block; font-size: 0.9rem; color: #666;">Sem: {{ exam.semester }}</span>
+            </div>
+            <div>
+                <a href="{% url 'select_exam' exam.id %}" class="btn">Pay Fee</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No active exams.</p>
+    {% endif %}
+
+    <h3 style="margin-top: 2rem;">Transaction History</h3>
+    {% if transactions %}
+    <table>
+        <thead>
+            <tr>
+                <th>Exam</th>
+                <th>Type</th>
+                <th>Pre-Payment ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for txn in transactions %}
+            <tr>
+                <td>{{ txn.exam.name }}</td>
+                <td>{{ txn.exam_type }}</td>
+                <td>{{ txn.payment_id }}</td>
+                <td>₹{{ txn.amount }}</td>
+                <td>
+                    <span
+                        style="color: {% if txn.status == 'SUCCESS' %}var(--success){% else %}var(--danger){% endif %};">
+                        {{ txn.status }}
+                    </span>
+                </td>
+                <td>{{ txn.timestamp }}</td>
+                <td>
+                    {% if txn.status == 'SUCCESS' %}
+                    <a href="{% url 'receipt' txn.id %}" style="text-decoration: underline;">View Receipt</a>
+                    {% else %}
+                    <a href="{% url 'payment_mock' txn.id %}" class="btn"
+                        style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Retry</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No transactions yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

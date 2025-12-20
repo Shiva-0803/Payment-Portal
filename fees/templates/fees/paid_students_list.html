@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Paid Students Report - EduPay{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .report-container,
+        .report-container * {
+            visibility: visible;
+        }
+
+        .report-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+    }
+
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+        color: #333;
+    }
+
+    .report-table th,
+    .report-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .report-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .report-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    /* Ensure text is visible on dark theme if print fails */
+    .report-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 2rem;">
+    <div class="report-container">
+        <div class="header-section">
+            <img src="{% static 'kucet_logo.png' %}" alt="KUCET Logo"
+                style="width: 80px; display: block; margin: 0 auto 10px auto;">
+            <h2
+                style="color: #000 !important; margin-bottom: 5px; font-weight: 800; background: none !important; -webkit-text-fill-color: black !important; visibility: visible !important; opacity: 1 !important;">
+                KAKATIYA UNIVERSITY</h2>
+            <h3
+                style="color: #000 !important; font-weight: 600; background: none !important; -webkit-text-fill-color: black !important; visibility: visible !important; opacity: 1 !important;">
+                KU College of Engineering and Technology</h3>
+            <h4
+                style="margin-top: 15px; color: #333; border-bottom: 2px solid #333; display: inline-block; padding-bottom: 5px;">
+                Paid Students Report</h4>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        <th>Exam Name</th>
+                        <th>Amount</th>
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for txn in transactions %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ txn.student.student_profile.roll_number }}</td>
+                        <td>{{ txn.student.student_profile.full_name }}</td>
+                        <td>{{ txn.exam.name }} ({{ txn.exam_type }})</td>
+                        <td>₹{{ txn.amount }}</td>
+                        <td style="font-family: monospace;">{{ txn.payment_id }}</td>
+                        <td>{{ txn.timestamp|date:"d M Y, H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center;">No paid students found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="no-print" style="text-align: center; margin-top: 2rem; margin-bottom: 3rem;">
+        <button onclick="window.print()" class="btn" style="max-width: 200px; display: inline-block;">Print
+            Report</button>
+        <a href="{% url 'dashboard' %}" class="btn"
+            style="max-width: 200px; display: inline-block; background: #6b7280; margin-left: 10px;">Back to
+            Dashboard</a>
+    </div>
+</div>
+{% endblock %}

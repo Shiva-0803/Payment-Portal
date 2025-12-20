@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load l10n %}
+
+{% block title %}Select Exam - EduPay{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Select Exam Type</h2>
+    <p><strong>Exam:</strong> {{ exam.name }}</p>
+    <p><strong>Semester:</strong> {{ exam.semester }}</p>
+
+    <form method="post" id="examForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Select Exam Category</label>
+            <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="exam_category" value="REGULAR" checked
+                        onchange="toggleSupplyOptions(false)">
+                    <span style="margin-left: 0.5rem;">Regular (Whole Semester)</span>
+                </label>
+                <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="exam_category" value="SUPPLY" onchange="toggleSupplyOptions(true)">
+                    <span style="margin-left: 0.5rem;">Supply (Backlogs)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group" id="supply_options" style="display: none;">
+            <label>Number of Backlog Subjects</label>
+            <input type="number" name="subject_count" id="subject_count" min="1" max="10"
+                placeholder="Enter number of subjects" oninput="calculateFee()">
+            <p style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">
+                Rule: ₹{{ exam.fee_supply_small }} for &#8804; 2 subjects, ₹{{ exam.fee_supply_large }} for > 2
+                subjects.
+            </p>
+        </div>
+
+        <input type="hidden" name="final_amount" id="final_amount" value="{{ exam.fee_regular }}">
+
+        <div
+            style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0; border: 1px solid #bbf7d0;">
+            <p style="margin: 0; font-size: 1.1rem;">Total Fee Amount: <strong
+                    style="color: #16a34a; font-size: 1.5rem;">₹<span id="fee_display">{{ exam.fee_regular
+                        }}</span></strong></p>
+        </div>
+
+        <button type="submit">Proceed to Payment</button>
+    </form>
+</div>
+
+<script>
+    const REGULAR_FEE = parseFloat("{{ exam.fee_regular|default:0|unlocalize }}");
+    const SUPPLY_SMALL = parseFloat("{{ exam.fee_supply_small|default:0|unlocalize }}");
+    const SUPPLY_LARGE = parseFloat("{{ exam.fee_supply_large|default:0|unlocalize }}");
+
+    function toggleSupplyOptions(show) {
+        const supplyDiv = document.getElementById('supply_options');
+        const countInput = document.getElementById('subject_count');
+
+        if (show) {
+            supplyDiv.style.display = 'block';
+            countInput.required = true;
+            countInput.value = ''; // Reset
+            updateDisplay(0);
+        } else {
+            supplyDiv.style.display = 'none';
+            countInput.required = false;
+            updateDisplay(REGULAR_FEE);
+        }
+    }
+
+    function calculateFee() {
+        const count = parseInt(document.getElementById('subject_count').value) || 0;
+        let amount = 0;
+
+        if (count > 0) {
+            if (count <= 2) {
+                amount = SUPPLY_SMALL;
+            } else {
+                amount = SUPPLY_LARGE;
+            }
+        }
+        updateDisplay(amount);
+    }
+
+    function updateDisplay(amount) {
+        document.getElementById('fee_display').innerText = amount;
+        document.getElementById('final_amount').value = amount;
+    }
+
+    // Initialize state on load
+    document.addEventListener('DOMContentLoaded', function () {
+        const supplyChecked = document.querySelector('input[name="exam_category"][value="SUPPLY"]').checked;
+        toggleSupplyOptions(supplyChecked);
+    });
+</script>
+{% endblock %}

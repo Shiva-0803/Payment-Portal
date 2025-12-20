@@ -1,0 +1,7 @@
+django>=5.0
+psycopg2-binary
+python-dotenv
+pillow
+qrcode
+reportlab
+requests

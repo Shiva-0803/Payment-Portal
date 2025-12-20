@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify OTP - EduPay{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Verify OTP</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit">Verify</button>
+    </form>
+    <p style="margin-top: 1rem;">Testing OTP: <strong>1234</strong></p>
+</div>
+{% endblock %}

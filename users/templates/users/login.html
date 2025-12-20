@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - EduPay{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <!-- Left: Login Form -->
+    <div class="login-form-wrapper">
+        <div class="card glass">
+            <h2
+                style="text-align: center; font-size: 2.5rem; margin-bottom: 0.5rem; background: linear-gradient(to right, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Welcome Back</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Login to access your exam
+                portal</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label style="color: var(--text-muted);"><i class="fas fa-envelope"></i> Email Address</label>
+                    {{ form.email }}
+                </div>
+
+                <button type="submit" class="btn">
+                    Send Login OTP <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </form>
+
+            <p
+                style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted); text-align: center; opacity: 0.7;">
+                Note: OTP will be sent to your email.
+            </p>
+        </div>
+    </div>
+
+    <!-- Right: Swiper Slider -->
+    <div class="slider-wrapper">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"
+                    style="background-image: url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="slide-content">
+                        <h2>Secure Payments</h2>
+                        <p>Fast and reliable exam fee processing.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide"
+                    style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="slide-content">
+                        <h2>Student Success</h2>
+                        <p>Focus on your exams, not the paperwork.</p>
+                    </div>
+                </div>
+                <div class="swiper-slide"
+                    style="background-image: url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="slide-content">
+                        <h2>Real-time Updates</h2>
+                        <p>Track your transaction status instantly.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 0,
+        effect: "fade",
+        loop: true,
+        speed: 1000,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Exam Statistics - EduPay{% endblock %}
+
+{% block content %}
+<div class="container"> <!-- Use container for wider layout if defined in style.css, else card works -->
+    <h2>Exam Fee Payment Statistics</h2>
+    <table border="1" style="width:100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr>
+                <th style="padding:10px;">Exam Name</th>
+                <th style="padding:10px;">Semester</th>
+                <th style="padding:10px;">Paid Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in stats %}
+            <tr>
+                <td style="padding:10px;">{{ item.exam.name }}</td>
+                <td style="padding:10px; text-align:center;">{{ item.exam.get_semester_display }}</td>
+                <td style="padding:10px; text-align:center;"><strong>{{ item.paid_count }}</strong></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="padding:10px; text-align:center;">No active exams found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+</div>
+{% endblock %}

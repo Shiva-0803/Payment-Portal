@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Receipt - EduPay{% endblock %}
+{% block extra_css %}
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .receipt-container,
+        .receipt-container * {
+            visibility: visible;
+        }
+
+        .receipt-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .no-print {
+            display: none;
+        }
+    }
+
+    .receipt-container {
+        border: 2px solid #333;
+        padding: 3rem;
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        color: #333 !important;
+        /* Force text color to be dark */
+    }
+
+    .receipt-header {
+        text-align: center;
+        border-bottom: 2px solid #333;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .receipt-header h1,
+    .receipt-header h2 {
+        color: #333 !important;
+        /* Ensure headers are visible */
+    }
+
+    .receipt-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .receipt-footer {
+        margin-top: 3rem;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="receipt-container">
+    <div class="receipt-header">
+        <img src="{% static 'kucet_logo.png' %}" alt="KUCET Logo"
+            style="width: 100px; display: block; margin: 0 auto 1rem auto;">
+        <div class="receipt-header">
+            <h1
+                style="font-weight: 800; font-size: 2.5rem; color: #000 !important; margin: 0; padding: 0; background: none !important; -webkit-text-fill-color: black !important;">
+                KAKATIYA UNIVERSITY</h1>
+            <h2
+                style="font-weight: 600; font-size: 1.5rem; color: #000 !important; margin-top: 5px; background: none !important; -webkit-text-fill-color: black !important;">
+                KU College of Engineering and Technology</h2>
+        </div>
+
+        <div class="receipt-row">
+            <strong>Transaction ID:</strong>
+            <span>{{ transaction.payment_id }}</span>
+        </div>
+        <div class="receipt-row">
+            <strong>Date & Time:</strong>
+            <span>{{ transaction.timestamp }}</span>
+        </div>
+        <div class="receipt-row">
+            <strong>Roll Number:</strong>
+            <span>{{ transaction.student.student_profile.roll_number }}</span>
+        </div>
+        <div class="receipt-row">
+            <strong>Student Name:</strong>
+            <span>{{ transaction.student.first_name }} {{ transaction.student.last_name }}</span>
+            <!-- Falls back to mobile if no name -->
+        </div>
+        <div class="receipt-row">
+            <strong>Exam:</strong>
+            <span>{{ transaction.exam.name }} (Sem {{ transaction.exam.semester }})</span>
+        </div>
+        <div class="receipt-row">
+            <strong>Type:</strong>
+            <span>{{ transaction.exam_type }}</span>
+        </div>
+        <div class="receipt-row">
+            <strong>Payment Method:</strong>
+            <span>{{ transaction.payment_method }}</span>
+        </div>
+        <div class="receipt-row" style="margin-top: 1rem; border-top: 1px dashed #ccc; padding-top: 1rem;">
+            <strong>Total Amount Paid:</strong>
+            <span style="font-weight: bold; font-size: 1.2rem;">₹{{ transaction.amount }}</span>
+        </div>
+
+        <div class="receipt-footer">
+            <p>This is a computer generated receipt.</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;" class="no-print">
+        <button onclick="window.print()">Print Receipt</button>
+        <a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a>
+    </div>
+    {% endblock %}

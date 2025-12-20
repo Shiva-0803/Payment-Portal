@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Registration - EduPay{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Complete Student Profile</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+</div>
+{% endblock %}
