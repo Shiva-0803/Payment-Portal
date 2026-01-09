@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Failed - EduPay{% endblock %}
+
+{% block content %}
+<div style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div class="card" style="max-width: 600px; width: 100%; padding: 2rem; text-align: center;">
+        <h2 style="color: #e74c3c; margin-bottom: 1rem;">Payment Failed</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem;">{{ error }}</p>
+
+        <a href="{% url 'dashboard' %}" class="btn" style="padding: 10px 20px;">Return to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
