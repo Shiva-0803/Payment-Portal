@@ -6,3 +6,7 @@ qrcode
 reportlab
 requests
 razorpay
+gunicorn
+whitenoise
+dj-database-url
+
