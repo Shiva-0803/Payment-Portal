@@ -1,5 +1,29 @@
 from django import forms
-from .models import StudentProfile
+from .models import StudentProfile, StudentRegistry
+
+class StudentEntryForm(forms.ModelForm):
+    class Meta:
+        model = StudentRegistry
+        fields = ['full_name', 'roll_number', 'branch', 'year', 'mobile_number']
+        labels = {
+            'full_name': 'Full Name',
+            'roll_number': 'Roll Number',
+            'branch': 'Branch',
+            'year': 'Year',
+            'mobile_number': 'Mobile Number',
+        }
+
+class StudentRegistryForm(forms.ModelForm):
+    class Meta:
+        model = StudentRegistry
+        fields = ['full_name', 'roll_number', 'branch', 'year', 'mobile_number']
+        labels = {
+            'full_name': 'Full Name',
+            'roll_number': 'Roll Number',
+            'branch': 'Branch',
+            'year': 'Year',
+            'mobile_number': 'Mobile Number (Optional)',
+        }
 
 class EmailLoginForm(forms.Form):
     email = forms.EmailField(label="Email Address")

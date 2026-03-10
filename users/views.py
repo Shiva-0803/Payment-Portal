@@ -3,11 +3,54 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import EmailLoginForm, OTPForm, StudentRegistrationForm, SecondaryLoginForm, StudentEditForm
-from .models import CustomUser, StudentProfile
+from .forms import EmailLoginForm, OTPForm, StudentRegistrationForm, SecondaryLoginForm, StudentEditForm, StudentRegistryForm
+from .models import CustomUser, StudentProfile, StudentRegistry
 from .utils import send_email_otp, generate_otp
 from fees.models import Transaction, Exam
 from fees.forms import ExamCreationForm
+
+from .models import CustomUser, StudentProfile, StudentRegistry
+from .forms import StudentEntryForm
+
+def student_entry_view(request):
+    if request.method == 'POST':
+        form = StudentEntryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Student details submitted successfully!')
+            return redirect('home')
+    else:
+        form = StudentEntryForm()
+    return render(request, 'users/student_entry.html', {'form': form})
+
+
+def student_details_view(request):
+    if request.method == 'POST':
+        roll_number = request.POST.get('roll_number', '').strip()
+        if roll_number:
+            try:
+                # Updated to fetch from StudentRegistry
+                student = StudentRegistry.objects.get(roll_number__iexact=roll_number)
+                return render(request, 'users/student_details.html', {'student': student})
+            except StudentRegistry.DoesNotExist:
+                return render(request, 'users/student_details.html', {'error': 'No student found with this Roll Number in the Registry.'})
+        else:
+             return render(request, 'users/student_details.html', {'error': 'Please enter a Roll Number.'})
+    
+    return render(request, 'users/student_details.html')
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+def add_student_view(request):
+    if request.method == 'POST':
+        form = StudentRegistryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Student added to registry successfully.')
+            return redirect('admin_dashboard')
+    else:
+        form = StudentRegistryForm()
+    return render(request, 'users/add_student.html', {'form': form})
 
 def home_view(request):
     # Auto-logout Staff/Exam Branch when visiting Home Page
@@ -105,7 +148,11 @@ def otp_verify_view(request):
         form = OTPForm(request.POST)
         if form.is_valid():
             otp = form.cleaned_data['otp']
-            if otp == request.session.get('auth_otp'):
+            session_otp = request.session.get('auth_otp')
+            print(f"DEBUG: Submitted OTP: type={type(otp)} val={otp}")
+            print(f"DEBUG: Session OTP: type={type(session_otp)} val={session_otp}")
+            
+            if str(otp) == str(session_otp):
                 email = request.session.get('auth_email')
                 user, created = CustomUser.objects.get_or_create(email=email)
                 
@@ -114,8 +161,8 @@ def otp_verify_view(request):
                 
                 # Check for RBAC - Secondary Auth for Staff
                 if user.is_staff or user.is_superuser or user.is_exam_branch:
-                     # Keep auth_email in session for next step
-                     return redirect('verify_password')
+                        # Keep auth_email in session for next step
+                        return redirect('verify_password')
                 
                 # Student Logic
                 if created:
@@ -210,13 +257,18 @@ def admin_dashboard_view(request):
     
     students = StudentProfile.objects.all().select_related('user')
     
+    registry_students = StudentRegistry.objects.all().order_by('-created_at')
+
     if branch:
         students = students.filter(branch=branch)
+        registry_students = registry_students.filter(branch=branch)
     if year:
         students = students.filter(year=year)
+        registry_students = registry_students.filter(year=year)
         
     context = {
         'students': students,
+        'registry_students': registry_students,
         'branch_choices': StudentProfile.BRANCH_CHOICES,
         'year_choices': StudentProfile.YEAR_CHOICES,
         'selected_branch': branch,

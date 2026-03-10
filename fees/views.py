@@ -8,8 +8,6 @@ from .forms import ExamCreationForm
 from .utils import create_razorpay_order, verify_razorpay_payment_signature
 from django.views.decorators.csrf import csrf_exempt
 
-# --- New RBAC Views ---
-
 @login_required
 def add_exam_view(request):
     if not request.user.is_exam_branch and not request.user.is_superuser:
@@ -91,7 +89,7 @@ def payment_page_view(request, transaction_id):
     if transaction.status == 'SUCCESS':
         return redirect('receipt', transaction_id=transaction.id)
         
-    # Create Razorpay Order if not exists
+    # Keep Razorpay Order Logic for legacy/fallback if needed (can be removed if fully replacing)
     if not transaction.razorpay_order_id:
         rp_order = create_razorpay_order(
             amount=transaction.amount, 
@@ -107,7 +105,7 @@ def payment_page_view(request, transaction_id):
         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
         'razorpay_order_id': transaction.razorpay_order_id,
         'razorpay_amount': int(transaction.amount * 100), # Amount in paisa
-        'callback_url': request.build_absolute_uri('/fees/payment-callback/') # Simplified
+        'callback_url': request.build_absolute_uri('/fees/payment-callback/'),
     }
         
     return render(request, 'fees/payment.html', context)

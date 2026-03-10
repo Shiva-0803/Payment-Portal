@@ -8,7 +8,7 @@ django.setup()
 from users.models import CustomUser
 
 email = 'admin@kucet.com'
-password = 'admin123'
+password = 'admin0803'
 
 # Find existing superuser or create new
 try:

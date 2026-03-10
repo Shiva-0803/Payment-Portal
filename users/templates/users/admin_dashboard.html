@@ -17,7 +17,7 @@
                 <select name="branch" id="branch" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
                     <option value="">All Branches</option>
                     {% for code, name in branch_choices %}
-                    <option value="{{ code }}" {% if selected_branch == code %}selected{% endif %}>{{ name }}</option>
+                    <option value="{{ code }}">{{ name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -27,7 +27,7 @@
                 <select name="year" id="year" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
                     <option value="">All Years</option>
                     {% for year_val, label in year_choices %}
-                    <option value="{{ year_val }}" {% if selected_year == year_val %}selected{% endif %}>{{ label }}
+                    <option value="{{ year_val }}">{{ label }}
                     </option>
                     {% endfor %}
                 </select>
@@ -40,10 +40,46 @@
             <a href="{% url 'paid_students_list' %}" class="btn"
                 style="background: #27ae60; line-height:38px; display:inline-block; height:38px; text-decoration:none; width: auto; min-width: 120px; padding: 0 20px; flex: 0 0 auto; text-align: center;">Paid
                 Students</a>
+            <a href="{% url 'add_student' %}" class="btn"
+                style="background: #8e44ad; line-height:38px; display:inline-block; height:38px; text-decoration:none; width: auto; min-width: 120px; padding: 0 20px; flex: 0 0 auto; text-align: center;">Add
+                Student</a>
             <button type="button" onclick="window.print()" class="btn"
                 style="background: #34495e; height: 38px; cursor: pointer; border: none; color: white; padding: 0 20px; border-radius: 4px; width: auto; min-width: 120px; flex: 0 0 auto;">Print
                 List</button>
         </form>
+    </div>
+
+    <!-- Entered Students Table -->
+    <div class="students-section" style="margin-bottom: 30px;">
+        <h3>Entered Students (Registry) - {{ registry_students.count }}</h3>
+        {% if registry_students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Branch</th>
+                    <th>Year</th>
+                    <th>Mobile</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in registry_students %}
+                <tr>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.full_name }}</td>
+                    <td>{{ student.branch }}</td>
+                    <td>{{ student.get_year_display }}</td>
+                    <td>{{ student.mobile_number|default:"-" }}</td>
+                    <td>{{ student.created_at|date:"M d, Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No students entered in registry yet.</p>
+        {% endif %}
     </div>
 
     <!-- Students Table -->
