@@ -94,6 +94,8 @@ DATABASES = {
 if os.getenv('DATABASE_URL'):
     import dj_database_url
     DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+elif os.getenv('RENDER'):
+    raise Exception("\n\n=== SUPER CRITICAL ERROR ===\nDATABASE_URL is missing from your Render Environment Variables!\nYou MUST add it exactly as 'DATABASE_URL' on the Payment-Portal Web Service!\n============================\n")
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
