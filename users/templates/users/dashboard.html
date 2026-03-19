@@ -38,6 +38,7 @@
     <table>
         <thead>
             <tr>
+                <th>Student Name</th>
                 <th>Exam</th>
                 <th>Type</th>
                 <th>Pre-Payment ID</th>
@@ -50,6 +51,7 @@
         <tbody>
             {% for txn in transactions %}
             <tr>
+                <td>{{ student_profile.full_name }}</td>
                 <td>{{ txn.exam.name }}</td>
                 <td>{{ txn.exam_type }}</td>
                 <td>{{ txn.payment_id }}</td>
@@ -65,7 +67,7 @@
                     {% if txn.status == 'SUCCESS' %}
                     <a href="{% url 'receipt' txn.id %}" style="text-decoration: underline;">View Receipt</a>
                     {% else %}
-                    <a href="{% url 'payment_mock' txn.id %}" class="btn"
+                    <a href="{% url 'payment_page' txn.id %}" class="btn"
                         style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Retry</a>
                     {% endif %}
                 </td>

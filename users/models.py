@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
     full_name = models.CharField(max_length=100, default='')
-    roll_number = models.CharField(max_length=20, unique=True)
+    roll_number = models.CharField(max_length=20, unique=True, primary_key=True)
     BRANCH_CHOICES = [
         ('IT', 'Information Technology (IT)'),
         ('CSE', 'Computer Science & Engineering (CSE)'),
@@ -47,7 +47,7 @@ class StudentProfile(models.Model):
 
 class StudentRegistry(models.Model):
     full_name = models.CharField(max_length=100)
-    roll_number = models.CharField(max_length=20, unique=True)
+    roll_number = models.CharField(max_length=20, unique=True, primary_key=True)
     BRANCH_CHOICES = [
         ('IT', 'Information Technology (IT)'),
         ('CSE', 'Computer Science & Engineering (CSE)'),

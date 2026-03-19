@@ -41,12 +41,30 @@
                 },
                 "theme": {
                     "color": "#3399cc"
+                },
+                "config": {
+                    "display": {
+                        "blocks": {
+                            "upi": {
+                                "name": "Pay via UPI & QR",
+                                "instruments": [
+                                    {
+                                        "method": "upi"
+                                    }
+                                ]
+                            }
+                        },
+                        "sequence": ["block.upi"],
+                        "preferences": {
+                            "show_default_blocks": true
+                        }
+                    }
                 }
             };
             
             // To force a specific method to open first
             // You can optionally pass this in options, but a simple hack for testing UPI specifically
-            options.method = 'upi';
+            // options.method = 'upi'; // Commented out to allow standard checkout with all options
             var rzp1 = new Razorpay(options);
             document.getElementById('rzp-button1').onclick = function (e) {
                 rzp1.open();

@@ -71,8 +71,11 @@ def select_exam_view(request, exam_id):
             else:
                 amount = exam.fee_supply_large
         
+        student_name = request.user.student_profile.full_name if hasattr(request.user, 'student_profile') else getattr(request.user, 'email', 'Unknown')
+        
         transaction = Transaction.objects.create(
             student=request.user,
+            student_name=student_name,
             exam=exam,
             exam_type=exam_type,
             amount=amount,
