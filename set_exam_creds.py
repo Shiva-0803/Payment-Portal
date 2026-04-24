@@ -7,8 +7,8 @@ django.setup()
 
 from users.models import CustomUser
 
-email = 'kucet@1281'
-password = 'exam0803'
+email = 'examkucet@kucet.com'
+password = 'exam@kucet'
 
 try:
     user = CustomUser.objects.get(email=email)

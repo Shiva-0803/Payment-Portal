@@ -15,8 +15,7 @@ python manage.py migrate --noinput
 echo "Collecting Static Files..."
 python manage.py collectstatic --noinput
 
-echo "Creating initial internal users..."
-python create_superuser.py
-python set_exam_creds.py
+echo "Syncing internal users..."
+python sync_credentials.py
 
 echo "Build Completed Successfully!"

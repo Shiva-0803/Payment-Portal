@@ -169,7 +169,7 @@ def otp_verify_view(request):
                     user.is_student = True
                     user.save()
                 
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 del request.session['auth_email'] # Cleanup email for students
                 
                 if not hasattr(user, 'student_profile') and user.is_student:
@@ -194,7 +194,7 @@ def verify_password_view(request):
             try:
                 user = CustomUser.objects.get(email=email)
                 if user.check_password(password):
-                    login(request, user)
+                    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                     del request.session['auth_email']
                     return redirect('dashboard')
                 else:
