@@ -16,6 +16,7 @@ def sync_user(email, password, is_superuser=False, is_exam_branch=False):
     user, created = CustomUser.objects.get_or_create(email=email)
     user.set_password(password)
     user.is_staff = True
+    user.is_active = True
     
     if is_superuser:
         user.is_superuser = True
