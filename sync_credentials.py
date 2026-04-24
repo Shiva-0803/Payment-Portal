@@ -27,20 +27,20 @@ def sync_user(email, password, is_superuser=False, is_exam_branch=False):
     
     status = "created" if created else "updated"
     role = "Superuser" if is_superuser else "Exam Branch"
-    print(f"SUCCESS: {role} user '{email}' {status}.")
+    print(f"SUCCESS: {role} user '{email}' {status}.", flush=True)
 
 if __name__ == "__main__":
-    print("--- Starting Credential Sync ---")
+    print("--- Starting Credential Sync ---", flush=True)
     
     # 1. Admin / Superuser
     admin_email_env = os.getenv('ADMIN_EMAIL')
     admin_password_env = os.getenv('ADMIN_PASSWORD')
     
     if admin_email_env and admin_password_env:
-        print(f"Using Render Environment Variables for Admin: {admin_email_env}")
+        print(f"Using Render Environment Variables for Admin: {admin_email_env}", flush=True)
         sync_user(admin_email_env, admin_password_env, is_superuser=True)
     else:
-        print("ADMIN_EMAIL or ADMIN_PASSWORD not set in Render. Using hardcoded defaults.")
+        print("ADMIN_EMAIL or ADMIN_PASSWORD not set in Render. Using hardcoded defaults.", flush=True)
         sync_user('adminkucet@kucet.com', 'admin@0803', is_superuser=True)
 
     # 2. Exam Branch User
@@ -48,10 +48,10 @@ if __name__ == "__main__":
     exam_password_env = os.getenv('EXAM_PASSWORD')
     
     if exam_email_env and exam_password_env:
-        print(f"Using Render Environment Variables for Exam Branch: {exam_email_env}")
+        print(f"Using Render Environment Variables for Exam Branch: {exam_email_env}", flush=True)
         sync_user(exam_email_env, exam_password_env, is_exam_branch=True)
     else:
-        print("EXAM_EMAIL or EXAM_PASSWORD not set in Render. Using hardcoded defaults.")
+        print("EXAM_EMAIL or EXAM_PASSWORD not set in Render. Using hardcoded defaults.", flush=True)
         sync_user('examkucet@kucet.com', 'exam@kucet', is_exam_branch=True)
     
-    print("--- Credential Sync Completed ---")
+    print("--- Credential Sync Completed ---", flush=True)
